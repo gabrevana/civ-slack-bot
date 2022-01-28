@@ -22,25 +22,26 @@ def greetings(payload: dict, say: Say):
     global user
     user = payload.get("user")
 
-    if user == os.getenv('PLAYER1'):
-        say(f"It is your <@{os.getenv('PLAYER2')}>")
-        user = os.getenv('PLAYER2')
+    match user:
+        case os.getenv('PLAYER1'):
+            say(f"It is your <@{os.getenv('PLAYER2')}>")
+            user = os.getenv('PLAYER2')
 
-    if user == os.getenv('PLAYER2'):
-        say(f"It is your <@{os.getenv('PLAYER3')}>")
-        user = os.getenv('PLAYER3')
+        case os.getenv('PLAYER2'):
+            say(f"It is your <@{os.getenv('PLAYER3')}>")
+            user = os.getenv('PLAYER3')
 
-    if user == os.getenv('PLAYER3'):
-        say(f"It is your <@{os.getenv('PLAYER4')}>")
-        user = os.getenv('PLAYER4')
+        case os.getenv('PLAYER3'):
+            say(f"It is your <@{os.getenv('PLAYER4')}>")
+            user = os.getenv('PLAYER4')
 
-    if user == os.getenv('PLAYER4'):
-        say(f"It is your <@{os.getenv('PLAYER5')}>")
-        user = os.getenv('PLAYER5')
+        case os.getenv('PLAYER4'):
+            say(f"It is your <@{os.getenv('PLAYER5')}>")
+            user = os.getenv('PLAYER5')
 
-    if user == os.getenv('PLAYER5'):
-        say(f"It is your <@{os.getenv('PLAYER1')}>")
-        user = os.getenv('PLAYER1')
+        case os.getenv('PLAYER5'):
+            say(f"It is your <@{os.getenv('PLAYER1')}>")
+            user = os.getenv('PLAYER1')
 
 
 @bolt_app.message('!t')
