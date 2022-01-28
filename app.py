@@ -13,31 +13,47 @@ load_dotenv()
 client = WebClient(token=os.getenv('SLACK_BOT_TOKEN'))
 bolt_app = App(token=os.getenv('SLACK_BOT_TOKEN'), signing_secret=os.getenv('SLACK_SIGNING_SECRET'))
 
-lst = [os.getenv('PLAYER1'), os.getenv('PLAYER2'), os.getenv('PLAYER3'), os.getenv('PLAYER4'), os.getenv('PLAYER5')]
-lst_len = len(lst)
-index = 0
+user = None
 
 
-@bolt_app.message("!t")
+@bolt_app.message('!c')
+def greetings(payload: dict, say: Say):
+    """ This will check all the message and pass only those which has 'hello slacky' in it """
+    global user
+    user = payload.get("user")
+
+    if user == os.getenv('PLAYER1'):
+        say(f"It is your <@{os.getenv('PLAYER2')}>")
+        user = os.getenv('PLAYER2')
+
+    if user == os.getenv('PLAYER2'):
+        say(f"It is your <@{os.getenv('PLAYER3')}>")
+        user = os.getenv('PLAYER3')
+
+    if user == os.getenv('PLAYER3'):
+        say(f"It is your <@{os.getenv('PLAYER4')}>")
+        user = os.getenv('PLAYER4')
+
+    if user == os.getenv('PLAYER4'):
+        say(f"It is your <@{os.getenv('PLAYER5')}>")
+        user = os.getenv('PLAYER5')
+
+    if user == os.getenv('PLAYER5'):
+        say(f"It is your <@{os.getenv('PLAYER1')}>")
+        user = os.getenv('PLAYER1')
+
+
+@bolt_app.message('!t')
 def greetings(say: Say):
     """ Checks all messages and if it has '!t' in it the bot will send a channel message @ the current player ready
     to play """
-    say(f"It is currently <@{lst[index]}> turn")
-
-
-@bolt_app.message("!c")
-def greetings(say: Say):
-    """ Checks all messages and if it has '!c' in it the bot will send a channel message @ the next player ready to
-    play """
-    global index
-    index = (index + 1) % lst_len
-    say(f"Next one to play is: <@{lst[index]}>")
+    say(f"It is currently <@{user}> turn")
 
 
 handler = SlackRequestHandler(bolt_app)
 
 
-@app.route("/civ/events", methods=["POST"])
+@app.route("/slack/events", methods=["POST"])
 def slack_events():
     """ Declaring the route where slack will post a request """
     return handler.handle(request)
